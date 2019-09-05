@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.multithread.asynctask.AsyncTaskActivity;
 import com.example.multithread.handler.HandlerAddThreadActivity;
 import com.example.multithread.handlerthread.HandlerThreadActivity;
 
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         handlerBtn.setOnClickListener(this);
         Button handlerThreadBtn = findViewById(R.id.handler_thread_btn);
         handlerThreadBtn.setOnClickListener(this);
+        Button asyncTaskBtn = findViewById(R.id.async_task_btn);
+        asyncTaskBtn.setOnClickListener(this);
     }
 
     @Override
@@ -38,6 +41,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.handler_thread_btn:
                 Intent handlerThreadIntent = new Intent(this, HandlerThreadActivity.class);
                 startActivity(handlerThreadIntent);
+                break;
+            case R.id.async_task_btn:
+                Intent asyncTaskIntent = new Intent(this, AsyncTaskActivity.class);
+                startActivity(asyncTaskIntent);
+                break;
             default:
                 break;
         }

@@ -39,6 +39,7 @@
             android:layout_marginTop="20dp"/>
 
         <Button
+            android:id="@+id/async_task_btn"
             android:layout_width="300dp"
             android:layout_height="50dp"
             android:text="AsyncTask"
