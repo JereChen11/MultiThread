@@ -9,6 +9,7 @@ import android.widget.Button;
 import com.example.multithread.asynctask.AsyncTaskActivity;
 import com.example.multithread.handler.HandlerAddThreadActivity;
 import com.example.multithread.handlerthread.HandlerThreadActivity;
+import com.example.multithread.intentservice.IntentServiceActivity;
 
 /**
  * @author jere
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         handlerThreadBtn.setOnClickListener(this);
         Button asyncTaskBtn = findViewById(R.id.async_task_btn);
         asyncTaskBtn.setOnClickListener(this);
+        Button intentServiceBtn = findViewById(R.id.intent_service_btn);
+        intentServiceBtn.setOnClickListener(this);
     }
 
     @Override
@@ -46,6 +49,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent asyncTaskIntent = new Intent(this, AsyncTaskActivity.class);
                 startActivity(asyncTaskIntent);
                 break;
+            case R.id.intent_service_btn:
+                Intent intentServiceIntent = new Intent(this, IntentServiceActivity.class);
+                startActivity(intentServiceIntent);
             default:
                 break;
         }
