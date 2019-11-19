@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.multithread.R;
 
+import java.lang.ref.WeakReference;
 import java.util.Arrays;
 
 /**
@@ -31,7 +32,7 @@ public class AsyncTaskActivity extends AppCompatActivity implements View.OnClick
         displayTv = findViewById(R.id.display_tv);
         startBtn = findViewById(R.id.start_btn);
         stopBtn = findViewById(R.id.stop_btn);
-        myAsyncTask = new MyAsyncTask();
+        myAsyncTask = new MyAsyncTask(this);
 
         startBtn.setOnClickListener(this);
         stopBtn.setOnClickListener(this);
@@ -62,7 +63,12 @@ public class AsyncTaskActivity extends AppCompatActivity implements View.OnClick
      * Progress（执行进度）: Integer类型
      * Result（执行结果）: String类型
      */
-    private class MyAsyncTask extends AsyncTask<String, Integer, String> {
+    private static class MyAsyncTask extends AsyncTask<String, Integer, String> {
+        private WeakReference<AsyncTaskActivity> asyncTaskActivityWeakReference;
+
+        MyAsyncTask(AsyncTaskActivity asyncTaskActivity) {
+            asyncTaskActivityWeakReference = new WeakReference<>(asyncTaskActivity);
+        }
 
         /**
          * 在后台任务开始计算执行前执行onPreExecute()操作
@@ -70,8 +76,12 @@ public class AsyncTaskActivity extends AppCompatActivity implements View.OnClick
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            displayTv.setText("onPreExecute: start! ");
-            Toast.makeText(AsyncTaskActivity.this, "onPreExecute", Toast.LENGTH_SHORT).show();
+            AsyncTaskActivity asyncTaskActivity = asyncTaskActivityWeakReference.get();
+            //只有在 AsyncTaskActivity 没被销毁的时候才显示 displayTv 及 Toast.
+            if (asyncTaskActivity != null && !asyncTaskActivity.isFinishing()) {
+                asyncTaskActivity.displayTv.setText("onPreExecute: start! ");
+                Toast.makeText(asyncTaskActivity, "onPreExecute", Toast.LENGTH_SHORT).show();
+            }
         }
 
         /**
@@ -103,9 +113,13 @@ public class AsyncTaskActivity extends AppCompatActivity implements View.OnClick
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
-            //得到一个整型数组，但每次里面只有一个元素，所有通过values[0]就可以拿到当前的执行进度
-            progressBar.setProgress(values[0]);
-            displayTv.setText("onProgressUpdate: value = " + values[0]);
+            AsyncTaskActivity asyncTaskActivity = asyncTaskActivityWeakReference.get();
+            //只有在 AsyncTaskActivity 没被销毁的时候才显示 progressBar 及 displayTv.
+            if (asyncTaskActivity != null && !asyncTaskActivity.isFinishing()) {
+                //得到一个整型数组，但每次里面只有一个元素，所有通过values[0]就可以拿到当前的执行进度
+                asyncTaskActivity.progressBar.setProgress(values[0]);
+                asyncTaskActivity.displayTv.setText("onProgressUpdate: value = " + values[0]);
+            }
         }
 
         /**
@@ -115,8 +129,12 @@ public class AsyncTaskActivity extends AppCompatActivity implements View.OnClick
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            displayTv.setText("onPostExecute: " + s);
-            Toast.makeText(AsyncTaskActivity.this, "onPostExecute", Toast.LENGTH_SHORT).show();
+            AsyncTaskActivity asyncTaskActivity = asyncTaskActivityWeakReference.get();
+            //只有在 AsyncTaskActivity 没被销毁的时候才显示 displayTv 及 Toast.
+            if (asyncTaskActivity != null && !asyncTaskActivity.isFinishing()) {
+                asyncTaskActivity.displayTv.setText("onPostExecute: " + s);
+                Toast.makeText(asyncTaskActivity, "onPostExecute", Toast.LENGTH_SHORT).show();
+            }
         }
 
         /**
@@ -127,9 +145,13 @@ public class AsyncTaskActivity extends AppCompatActivity implements View.OnClick
         @Override
         protected void onCancelled() {
             super.onCancelled();
-            displayTv.setText("onCancelled");
-            progressBar.setProgress(0);
-            Toast.makeText(AsyncTaskActivity.this, "onCancelled", Toast.LENGTH_SHORT).show();
+            AsyncTaskActivity asyncTaskActivity = asyncTaskActivityWeakReference.get();
+            //只有在 AsyncTaskActivity 没被销毁的时候才显示 progressBar displayTv Toast.
+            if (asyncTaskActivity != null && !asyncTaskActivity.isFinishing()) {
+                asyncTaskActivity.displayTv.setText("onCancelled");
+                asyncTaskActivity.progressBar.setProgress(0);
+                Toast.makeText(asyncTaskActivity, "onCancelled", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
