@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.example.multithread.R;
 
+import java.lang.ref.WeakReference;
+
 /**
  * @author jere
  */
@@ -41,6 +43,9 @@ public class HandlerAddThreadActivity extends AppCompatActivity {
             }
         };
 
+        //方法二：利用静态内部类，防止内存泄露。
+//        mHandler = new MyHandler(this);
+
         mClickBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,6 +65,27 @@ public class HandlerAddThreadActivity extends AppCompatActivity {
             childThreadMessage.what = 1;
             //将该消息放入主线程的消息队列中
             mHandler.sendMessage(childThreadMessage);
+        }
+    }
+
+    //静态内部类，防止内存泄露
+    public static class MyHandler extends Handler {
+        WeakReference<HandlerAddThreadActivity> weakReference;
+
+        public MyHandler(HandlerAddThreadActivity activity) {
+            weakReference = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            HandlerAddThreadActivity activity = weakReference.get();
+            if (activity != null && !activity.isFinishing()) {
+                if (msg.what == 1) {
+                    //更新UI
+                    activity.mDisplayTv.setText("Jere test: User Handler ");
+                }
+            }
         }
     }
 }
