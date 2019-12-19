@@ -10,6 +10,7 @@ import com.example.multithread.asynctask.AsyncTaskActivity;
 import com.example.multithread.handler.HandlerAddThreadActivity;
 import com.example.multithread.handlerthread.HandlerThreadActivity;
 import com.example.multithread.intentservice.IntentServiceActivity;
+import com.example.multithread.multiAsyncTask.TestMultipleAsyncTask;
 
 /**
  * @author jere
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         asyncTaskBtn.setOnClickListener(this);
         Button intentServiceBtn = findViewById(R.id.intent_service_btn);
         intentServiceBtn.setOnClickListener(this);
+        Button multiAsyncTaskBtn = findViewById(R.id.multi_async_task_btn);
+        multiAsyncTaskBtn.setOnClickListener(this);
     }
 
     @Override
@@ -52,6 +55,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.intent_service_btn:
                 Intent intentServiceIntent = new Intent(this, IntentServiceActivity.class);
                 startActivity(intentServiceIntent);
+                break;
+            case R.id.multi_async_task_btn:
+                Intent multiAsyncTaskIntent = new Intent(this, TestMultipleAsyncTask.class);
+                startActivity(multiAsyncTaskIntent);
+                break;
             default:
                 break;
         }
