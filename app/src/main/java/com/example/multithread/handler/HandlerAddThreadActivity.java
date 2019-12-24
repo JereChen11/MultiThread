@@ -37,27 +37,27 @@ public class HandlerAddThreadActivity extends AppCompatActivity {
         mProgressBar = findViewById(R.id.test_handler_progress_bar);
 
         //mHandler用于处理主线程消息队列中的子线程消息
-        mHandler = new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                switch (msg.what) {
-                    case 1:
-                        //更新 TextView UI
-                        mDisplayTv.setText("CustomChildThread starting!");
-                        break;
-                    case 2:
-                        //获取 ProgressBar 的进度，然后显示进度值
-                        Bundle bundle = msg.getData();
-                        int process = bundle.getInt(CURRENT_PROCESS_KEY);
-                        mProgressBar.setProgress(process);
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-        };
+//        mHandler = new Handler(Looper.getMainLooper()) {
+//            @Override
+//            public void handleMessage(Message msg) {
+//                super.handleMessage(msg);
+//                switch (msg.what) {
+//                    case 1:
+//                        //更新 TextView UI
+//                        mDisplayTv.setText("CustomChildThread starting!");
+//                        break;
+//                    case 2:
+//                        //获取 ProgressBar 的进度，然后显示进度值
+//                        Bundle bundle = msg.getData();
+//                        int process = bundle.getInt(CURRENT_PROCESS_KEY);
+//                        mProgressBar.setProgress(process);
+//                        break;
+//                    default:
+//                        break;
+//                }
+//
+//            }
+//        };
 
 //        /**
 //         * 将可运行的 Runnable 添加到消息队列。Runnable 将在该 Handler 相关的线程上运行处理。
@@ -71,7 +71,7 @@ public class HandlerAddThreadActivity extends AppCompatActivity {
 //        });
 
         //方法二：利用静态内部类，防止内存泄露。
-//        mHandler = new MyHandler(this);
+        mHandler = new MyHandler(this);
 
         Button mClickBtn = findViewById(R.id.click_btn);
         mClickBtn.setOnClickListener(new View.OnClickListener() {
@@ -129,11 +129,19 @@ public class HandlerAddThreadActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             HandlerAddThreadActivity activity = weakReference.get();
-            if (activity != null && !activity.isFinishing()) {
-                if (msg.what == 1) {
-                    //更新UI
-                    activity.mDisplayTv.setText("Jere test: User Handler ");
-                }
+            switch (msg.what) {
+                case 1:
+                    //更新 TextView UI
+                    activity.mDisplayTv.setText("CustomChildThread starting!");
+                    break;
+                case 2:
+                    //获取 ProgressBar 的进度，然后显示进度值
+                    Bundle bundle = msg.getData();
+                    int process = bundle.getInt(CURRENT_PROCESS_KEY);
+                    activity.mProgressBar.setProgress(process);
+                    break;
+                default:
+                    break;
             }
         }
     }
