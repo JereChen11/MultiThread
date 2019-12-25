@@ -9,11 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".multiAsyncTask.TestMultipleAsyncTask"></activity>
+        <activity android:name=".handler.HandlerObtainMessageActivity"></activity>
+        <activity android:name=".handler.HandlerPostFunctionActivity" />
+        <activity android:name=".multiAsyncTask.TestMultipleAsyncTask" />
 
         <service
             android:name=".intentservice.MyIntentService"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <activity android:name=".intentservice.IntentServiceActivity" />
         <activity android:name=".asynctask.AsyncTaskActivity" />

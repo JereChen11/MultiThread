@@ -2,7 +2,6 @@ package com.example.multithread.handler;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -17,8 +16,7 @@ import java.lang.ref.WeakReference;
 /**
  * @author jere
  */
-public class HandlerAddThreadActivity extends AppCompatActivity {
-    private static final String TAG = "HandlerAddThreadActivity";
+public class HandlerPostFunctionActivity extends AppCompatActivity {
     public static final String CURRENT_PROCESS_KEY = "CURRENT_PROCESS";
     private TextView mDisplayTv;
     private Handler mHandler;
@@ -30,33 +28,10 @@ public class HandlerAddThreadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_handler_add_thread);
 
         TextView titleTv = findViewById(R.id.title_tv);
-        titleTv.setText("Handler + Thread");
+        titleTv.setText("Handler post() function");
 
         mDisplayTv = findViewById(R.id.display_tv);
         mProgressBar = findViewById(R.id.test_handler_progress_bar);
-
-        //mHandler用于处理主线程消息队列中的子线程消息
-        mHandler = new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                switch (msg.what) {
-                    case 1:
-                        //更新 TextView UI
-                        mDisplayTv.setText("CustomChildThread starting!");
-                        break;
-                    case 2:
-                        //获取 ProgressBar 的进度，然后显示进度值
-                        Bundle bundle = msg.getData();
-                        int process = bundle.getInt(CURRENT_PROCESS_KEY);
-                        mProgressBar.setProgress(process);
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-        };
 
 //        /**
 //         * 将可运行的 Runnable 添加到消息队列。Runnable 将在该 Handler 相关的线程上运行处理。
@@ -69,7 +44,7 @@ public class HandlerAddThreadActivity extends AppCompatActivity {
 //            }
 //        });
 
-        //方法二：利用静态内部类，防止内存泄露。
+        //新建静态内部类 Handler 对象
         mHandler = new MyHandler(this);
 
         Button mClickBtn = findViewById(R.id.click_btn);
@@ -102,25 +77,14 @@ public class HandlerAddThreadActivity extends AppCompatActivity {
                     //让当前执行的线程（即 CustomChildThread）睡眠 1s
                     Thread.sleep(1000);
 
-                    //Message 传递参数
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(CURRENT_PROCESS_KEY, i);
-                    Message progressBarProcessMsg = new Message();
-                    progressBarProcessMsg.setData(bundle);
-                    progressBarProcessMsg.what = 2;
-                    mHandler.sendMessage(progressBarProcessMsg);
-
-
-                    //Handler post 方法。
-                    MyRunnable runnable = new MyRunnable(HandlerAddThreadActivity.this, i);
-//                    MyHandler handler = new MyHandler(HandlerAddThreadActivity.this);
+                    //新创建一个 Runnable 用户处理 UI 工作
+                    MyRunnable runnable = new MyRunnable(HandlerPostFunctionActivity.this, i);
+                    //调用Handler post 方法。
                     mHandler.post(runnable);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-
-
         }
     }
 
@@ -129,42 +93,41 @@ public class HandlerAddThreadActivity extends AppCompatActivity {
      */
     public static class MyRunnable implements Runnable {
         private int progressBarValue;
-        private WeakReference<HandlerAddThreadActivity> weakReference;
+        private WeakReference<HandlerPostFunctionActivity> weakReference;
 
-        public MyRunnable(HandlerAddThreadActivity activity, int value) {
+        public MyRunnable(HandlerPostFunctionActivity activity, int value) {
             this.weakReference = new WeakReference<>(activity);
             this.progressBarValue = value;
         }
 
         @Override
         public void run() {
-            HandlerAddThreadActivity activity = weakReference.get();
+            HandlerPostFunctionActivity activity = weakReference.get();
             if (activity != null && !activity.isFinishing()) {
                 activity.mProgressBar.setProgress(progressBarValue);
             }
         }
     }
 
-
     /**
      * 将 Handler 写成静态内部类，防止内存泄露
      */
     public static class MyHandler extends Handler {
-        WeakReference<HandlerAddThreadActivity> weakReference;
+        WeakReference<HandlerPostFunctionActivity> weakReference;
 
-        public MyHandler(HandlerAddThreadActivity activity) {
+        public MyHandler(HandlerPostFunctionActivity activity) {
             weakReference = new WeakReference<>(activity);
         }
 
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            HandlerAddThreadActivity activity = weakReference.get();
+            HandlerPostFunctionActivity activity = weakReference.get();
             if (activity != null && !activity.isFinishing()) {
                 switch (msg.what) {
                     case 1:
                         //更新 TextView UI
-                        activity.mDisplayTv.setText("CustomChildThread starting!");
+                        activity.mDisplayTv.setText("Handler Post() Runnable Test!!");
                         break;
                     case 2:
                         //获取 ProgressBar 的进度，然后显示进度值
