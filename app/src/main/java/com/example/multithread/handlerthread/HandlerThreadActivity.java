@@ -40,10 +40,10 @@ public class HandlerThreadActivity extends AppCompatActivity {
         //启动线程
         myHandlerThread.start();
 
-        //创建Handler关联主线程，在主线程上执行run()，可以用于执行UI工作
+        //创建主线程Handler，关联APP的主Looper对象
         mMainHandler = new Handler(getMainLooper());
 
-        //创建工作线程Handler，关联HandlerThread的Looper对象，重写handleMessage()方法，处理消息
+        //创建工作线程Handler，关联HandlerThread的Looper对象，所以它无法与主线程通讯
         mWorkHandler = new Handler(myHandlerThread.getLooper()) {
             @Override
             public void handleMessage(Message msg) {
@@ -54,12 +54,14 @@ public class HandlerThreadActivity extends AppCompatActivity {
                         //设置Progress Bar 1
                         for (int i = 1; i <= 4; i++) {
                             try {
+                                //模拟耗时工作
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
 
                             final int progressSchedule = i;
+                            //在工作线程中，通过主线程Handler, 传递信息给主线程，通知主线程处理UI工作。
                             mMainHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -72,12 +74,14 @@ public class HandlerThreadActivity extends AppCompatActivity {
                         //设置Progress Bar 2
                         for (int i = 1; i <= 4; i++) {
                             try {
+                                //模拟耗时工作
                                 Thread.sleep(1300);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
 
                             final int progressSchedule2 = i;
+                            //在工作线程中，通过主线程Handler, 传递信息给主线程，通知主线程处理UI工作。
                             mMainHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -95,7 +99,7 @@ public class HandlerThreadActivity extends AppCompatActivity {
         startBtn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //通过mWorkHandler发送处理 progress bar 1 的信息
+                //通过工作线程Handler，mWorkHandler发送处理 progress bar 1 的信息给工作线程。
                 Message msg = new Message();
                 msg.what = SET_PROGRESS_BAR_1;
                 mWorkHandler.sendMessage(msg);
@@ -105,7 +109,7 @@ public class HandlerThreadActivity extends AppCompatActivity {
         startBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //通过mWorkHandler发送处理 progress bar 2 的信息
+                //通过工作线程Handler mWorkHandler发送处理 progress bar 2 的信息给工作线程。
                 Message msg = new Message();
                 msg.what = SET_PROGRESS_BAR_2;
                 mWorkHandler.sendMessage(msg);
@@ -117,6 +121,9 @@ public class HandlerThreadActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //
         myHandlerThread.quit();
+        // // 防止工作线程Handler内存泄露，所以清空其关联的Looper对象中的消息队列
+        mWorkHandler.removeCallbacks(null);
     }
 }
