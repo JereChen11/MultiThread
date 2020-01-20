@@ -99,6 +99,9 @@ public class AsyncTaskActivity extends AppCompatActivity implements View.OnClick
                 }
                 //通过调用publishProgress()方法，将执行进度传递给onProgressUpdate()
                 publishProgress(i);
+                if (isCancelled()) {
+                    break;
+                }
             }
 
             String result;
