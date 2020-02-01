@@ -26,14 +26,14 @@ public class IntentServiceActivity extends AppCompatActivity {
 
         downloadProgressBar = findViewById(R.id.download_progress_bar);
 
-        //用于创建 Messenger
+        //用于创建 Messenger，接收 IntentService 回复的消息
         MessengerHandler messengerHandler = new MessengerHandler(this);
 
         //模拟 Jere 做下载动作
         Intent intent = new Intent(this, MyIntentService.class);
         intent.setAction(MyIntentService.DOWNLOAD_ACTION);
         intent.putExtra(MyIntentService.TEST_AUTHOR, "Jere");
-        //将 Messenger 传递给 IntentService，让其回复消息回来
+        //将 Messenger 传递给 IntentService, 使其传递消息回来，实现客户端与服务端之间进行沟通
         intent.putExtra(MyIntentService.TEST_MESSENGER, new Messenger(messengerHandler));
         startService(intent);
 
@@ -62,7 +62,7 @@ public class IntentServiceActivity extends AppCompatActivity {
             super.handleMessage(msg);
             //msg 为 IntentService 回复的消息，包含 Bundle 等信息。
             Bundle bundle = msg.getData();
-            //获取 IntentService 传递过来的下载进度
+            //获取 IntentService 传递过来的 下载进度 参数
             int downloadProgressBarValue = bundle.getInt(MyIntentService.DOWNLOAD_PROGRESS_VALUE_KEY);
 
             //将下载进度设置成 ProgressBar 的进度，显示出来。
