@@ -121,9 +121,6 @@ public class HandlerThreadActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //
         myHandlerThread.quit();
-        // // 防止工作线程Handler内存泄露，所以清空其关联的Looper对象中的消息队列
-        mWorkHandler.removeCallbacks(null);
     }
 }
