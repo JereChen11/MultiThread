@@ -1,10 +1,10 @@
 package com.example.multithread.handler;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -12,14 +12,10 @@ import android.widget.TextView;
 
 import com.example.multithread.R;
 
-import java.lang.ref.WeakReference;
-
 /**
  * @author jere
  */
 public class HandlerObtainMessageActivity extends AppCompatActivity {
-    private static final String TAG = "HandlerAddThreadActivity";
-    public static final String CURRENT_PROCESS_KEY = "CURRENT_PROCESS";
     private TextView mDisplayTv;
     private Handler mHandler;
     private ProgressBar mProgressBar;
@@ -75,7 +71,7 @@ public class HandlerObtainMessageActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            //
+            //发送第一条消息，代表开始执行异步任务
             mHandler.obtainMessage(1).sendToTarget();
 
             //模拟耗时进度，将进度值传给主线程用于更新 ProgressBar 进度。
@@ -84,7 +80,7 @@ public class HandlerObtainMessageActivity extends AppCompatActivity {
                     //让当前执行的线程（即 CustomChildThread）睡眠 1s
                     Thread.sleep(1000);
 
-                    //将 i 传递给主线程 progressBar
+                    //将执行进度参数 i 传递给主线程 progressBar
                     mHandler.obtainMessage(2, i).sendToTarget();
                 } catch (InterruptedException e) {
                     e.printStackTrace();

@@ -2,7 +2,6 @@ package com.example.multithread.handler;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -17,9 +16,7 @@ import java.lang.ref.WeakReference;
  * @author jere
  */
 public class HandlerPostFunctionActivity extends AppCompatActivity {
-    public static final String CURRENT_PROCESS_KEY = "CURRENT_PROCESS";
-    private TextView mDisplayTv;
-    private Handler mHandler;
+    private Handler mMainHandler;
     private ProgressBar mProgressBar;
 
     @Override
@@ -30,7 +27,6 @@ public class HandlerPostFunctionActivity extends AppCompatActivity {
         TextView titleTv = findViewById(R.id.title_tv);
         titleTv.setText("Handler post() function");
 
-        mDisplayTv = findViewById(R.id.display_tv);
         mProgressBar = findViewById(R.id.test_handler_progress_bar);
 
 //        /**
@@ -45,7 +41,7 @@ public class HandlerPostFunctionActivity extends AppCompatActivity {
 //        });
 
         //新建静态内部类 Handler 对象
-        mHandler = new MyHandler(this);
+        mMainHandler = new Handler(getMainLooper());
 
         Button mClickBtn = findViewById(R.id.click_btn);
         mClickBtn.setOnClickListener(new View.OnClickListener() {
@@ -65,12 +61,6 @@ public class HandlerPostFunctionActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            //在子线程中创建一个消息对象
-            Message childThreadMessage = new Message();
-            childThreadMessage.what = 1;
-            //将该消息放入主线程的消息队列中
-            mHandler.sendMessage(childThreadMessage);
-
             //模拟耗时进度，将进度值传给主线程用于更新 ProgressBar 进度。
             for (int i = 1; i <= 5; i++) {
                 try {
@@ -80,7 +70,7 @@ public class HandlerPostFunctionActivity extends AppCompatActivity {
                     //新创建一个 Runnable 用户处理 UI 工作
                     MyRunnable runnable = new MyRunnable(HandlerPostFunctionActivity.this, i);
                     //调用Handler post 方法。
-                    mHandler.post(runnable);
+                    mMainHandler.post(runnable);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -95,7 +85,7 @@ public class HandlerPostFunctionActivity extends AppCompatActivity {
         private int progressBarValue;
         private WeakReference<HandlerPostFunctionActivity> weakReference;
 
-        public MyRunnable(HandlerPostFunctionActivity activity, int value) {
+        MyRunnable(HandlerPostFunctionActivity activity, int value) {
             this.weakReference = new WeakReference<>(activity);
             this.progressBarValue = value;
         }
@@ -106,40 +96,6 @@ public class HandlerPostFunctionActivity extends AppCompatActivity {
             if (activity != null && !activity.isFinishing()) {
                 activity.mProgressBar.setProgress(progressBarValue);
             }
-        }
-    }
-
-    /**
-     * 将 Handler 写成静态内部类，防止内存泄露
-     */
-    public static class MyHandler extends Handler {
-        WeakReference<HandlerPostFunctionActivity> weakReference;
-
-        public MyHandler(HandlerPostFunctionActivity activity) {
-            weakReference = new WeakReference<>(activity);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            HandlerPostFunctionActivity activity = weakReference.get();
-            if (activity != null && !activity.isFinishing()) {
-                switch (msg.what) {
-                    case 1:
-                        //更新 TextView UI
-                        activity.mDisplayTv.setText("Handler Post() Runnable Test!!");
-                        break;
-                    case 2:
-                        //获取 ProgressBar 的进度，然后显示进度值
-                        Bundle bundle = msg.getData();
-                        int process = bundle.getInt(CURRENT_PROCESS_KEY);
-                        activity.mProgressBar.setProgress(process);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
         }
     }
 }
