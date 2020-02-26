@@ -1,88 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/thread_btn"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:text="继承Thread类"
-            android:textSize="20dp"
-            android:textAllCaps="false"
-            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <Button
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:text="实现Runnable接口"
-            android:textSize="20dp"
-            android:textAllCaps="false"
-            android:layout_marginTop="20dp"/>
+            <Button
+                android:id="@+id/thread_btn"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:text="继承Thread类"
+                android:textAllCaps="false"
+                android:textSize="20dp" />
 
-        <Button
-            android:id="@+id/handler_btn"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:text="Handler + Thread"
-            android:textSize="20dp"
-            android:textAllCaps="false"
-            android:layout_marginTop="20dp"/>
+            <Button
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:text="实现Runnable接口"
+                android:textAllCaps="false"
+                android:textSize="20dp" />
 
-        <Button
-            android:id="@+id/async_task_btn"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:text="AsyncTask"
-            android:textSize="20dp"
-            android:textAllCaps="false"
-            android:layout_marginTop="20dp"/>
+            <Button
+                android:id="@+id/handler_btn"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:text="Handler + Thread"
+                android:textAllCaps="false"
+                android:textSize="20dp" />
 
-        <Button
-            android:id="@+id/handler_thread_btn"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:text="HandlerThread"
-            android:textSize="20dp"
-            android:textAllCaps="false"
-            android:layout_marginTop="20dp"/>
+            <Button
+                android:id="@+id/async_task_btn"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:text="AsyncTask"
+                android:textAllCaps="false"
+                android:textSize="20dp" />
 
-        <Button
-            android:id="@+id/intent_service_btn"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:text="IntentService"
-            android:textSize="20dp"
-            android:textAllCaps="false"
-            android:layout_marginTop="20dp"/>
+            <Button
+                android:id="@+id/handler_thread_btn"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:text="HandlerThread"
+                android:textAllCaps="false"
+                android:textSize="20dp" />
 
-        <Button
-            android:id="@+id/thread_pool_btn"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:text="线程池ThreadPool "
-            android:textSize="20dp"
-            android:textAllCaps="false"
-            android:layout_marginTop="20dp"/>
+            <Button
+                android:id="@+id/intent_service_btn"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:text="IntentService"
+                android:textAllCaps="false"
+                android:textSize="20dp" />
 
-        <Button
-            android:id="@+id/multi_async_task_btn"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:text="MultiAsyncTask"
-            android:textSize="20dp"
-            android:textAllCaps="false"
-            android:layout_marginTop="20dp"/>
+            <Button
+                android:id="@+id/thread_pool_btn"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:text="线程池ThreadPool"
+                android:textAllCaps="false"
+                android:textSize="20dp" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/multi_async_task_btn"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:text="MultiAsyncTask"
+                android:textAllCaps="false"
+                android:textSize="20dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
 
 </android.support.constraint.ConstraintLayout>
