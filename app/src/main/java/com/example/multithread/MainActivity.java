@@ -11,6 +11,7 @@ import com.example.multithread.handler.HandlerAddThreadActivity;
 import com.example.multithread.handlerthread.HandlerThreadActivity;
 import com.example.multithread.intentservice.IntentServiceActivity;
 import com.example.multithread.multiAsyncTask.TestMultipleAsyncTask;
+import com.example.multithread.threadpool.ThreadPoolActivity;
 
 /**
  * @author jere
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intentServiceBtn.setOnClickListener(this);
         Button multiAsyncTaskBtn = findViewById(R.id.multi_async_task_btn);
         multiAsyncTaskBtn.setOnClickListener(this);
+        Button threadPoolBtn = findViewById(R.id.thread_pool_btn);
+        threadPoolBtn.setOnClickListener(this);
     }
 
     @Override
@@ -59,6 +62,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.multi_async_task_btn:
                 Intent multiAsyncTaskIntent = new Intent(this, TestMultipleAsyncTask.class);
                 startActivity(multiAsyncTaskIntent);
+                break;
+            case R.id.thread_pool_btn:
+                Intent threadPoolIntent = new Intent(this, ThreadPoolActivity.class);
+                startActivity(threadPoolIntent);
                 break;
             default:
                 break;
