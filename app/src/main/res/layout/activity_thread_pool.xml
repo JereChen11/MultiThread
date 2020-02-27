@@ -6,4 +6,54 @@
     android:layout_height="match_parent"
     tools:context=".threadpool.ThreadPoolActivity">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/custom_thread_pool_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CustomThreadPool"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/new_fixed_thread_pool_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="newFixedThreadPool"
+            android:textAllCaps="false"
+            android:layout_marginTop="20dp"/>
+
+        <Button
+            android:id="@+id/new_scheduled_thread_pool_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="newScheduledThreadPool"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/new_cached_thread_pool_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="newCachedThreadPool"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/new_single_thread_pool_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="newSingleThreadExecutor"
+            android:textAllCaps="false" />
+
+
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>
